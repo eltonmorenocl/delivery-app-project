@@ -5,6 +5,7 @@ import DeliveryAppLogo from '../../images/DeliveryApp_Logo.png';
 import Enter from '../../API/Enter';
 import context from '../../Context/Context';
 import './login.css';
+import { saveInformationToLocalstorage } from '../../Service/LocalSotorage';
 
 export default function Login() {
   const [password, setPassword] = useState('');
@@ -41,12 +42,12 @@ export default function Login() {
       return;
     }
 
-    localStorage.setItem('user', JSON.stringify({
+    saveInformationToLocalstorage('user', {
       name: response.name,
       email,
       role: response.role,
       token: response.token,
-    }));
+    });
 
     setName(response.name);
     setEmail(email);
@@ -59,7 +60,6 @@ export default function Login() {
   return (
     <LayoutLogin>
       <form className="login-form">
-        {/* <span className="login-form-title">Bem vindo! 😃</span> */}
 
         <span className="login-form-title">
           <img src={ DeliveryAppLogo } alt="imagem da logotipo" />

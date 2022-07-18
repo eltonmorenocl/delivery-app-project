@@ -1,4 +1,4 @@
-{
+  {
   "name": "delivery-app-back-end",
   "version": "0.1.0",
   "description": "Back-end do projeto App de Delivery",
@@ -9,7 +9,6 @@
   "engineStrict": true,
   "private": true,
   "scripts": {
-    "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
     "start": "node .",
     "predev": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
     "dev": "nodemon .",

@@ -2,6 +2,8 @@ const { Router } = require('express');
 
 const CostumerController = require('../../../modules/user/controller');
 
+const { authHandler } = require('../middleware/Validators');
+
 const {
   validateUserLogin,
   validateUserRegister,
@@ -9,9 +11,7 @@ const {
 
 const userRouter = Router();
 
-userRouter.get('/', (_req, res) => {
-  res.send('This is router: /user');
-});
+userRouter.get('/', authHandler, CostumerController.findAll);
 
 userRouter.post('/login', validateUserLogin, CostumerController.login);
 userRouter.post('/register', validateUserRegister, CostumerController.register);

@@ -94,6 +94,7 @@ input:focus {
   flex-wrap: wrap;
   justify-content: center;
   padding-bottom: 13px;
+  width: 100%;
 }
 
 .register-form-btn {

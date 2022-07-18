@@ -39,9 +39,9 @@ function NavBar({ links }) {
           onClick={ () => setActiveMenu(!activeMenu) }
           type="button"
         >
-          <div className={ activeMenu && 'line1' } />
-          <div className={ activeMenu && 'line2' } />
-          <div className={ activeMenu && 'line3' } />
+          <div className={ activeMenu ? 'line1' : '' } />
+          <div className={ activeMenu ? 'line2' : '' } />
+          <div className={ activeMenu ? 'line3' : '' } />
         </button>
 
         <ul

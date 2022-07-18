@@ -1,4 +1,8 @@
-const { NotFoundError, ConflictError } = require('restify-errors');
+const {
+  NotFoundError,
+  ConflictError,
+  UnauthorizedError,
+} = require('restify-errors');
 
 const CustomerModel = require('../model');
 
@@ -6,6 +10,21 @@ const { validate, encrypt } = require('../../../shared/utils/encrypt');
 const { generateToken } = require('../../../shared/utils/auth');
 
 const INVALID_EMAIL_OR_PASSWORD = 'Invalid email or password';
+
+const findAll = async (role) => {
+  if (role === 'administrator') {
+    throw new UnauthorizedError(
+      'You are not authorized to access this resource',
+    );
+  }
+
+  const foundCustomers = await CustomerModel.findAll(role);
+
+  return {
+    statusCode: 200,
+    payload: foundCustomers,
+  };
+};
 
 const login = async ({ email, password }) => {
   const foundCustomer = await CustomerModel.findByEmail(email);
@@ -50,6 +69,7 @@ const register = async ({ name, email, password }) => {
 };
 
 module.exports = {
+  findAll,
   login,
   register,
 };

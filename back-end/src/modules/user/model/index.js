@@ -1,4 +1,19 @@
+const { Op } = require('sequelize');
+
 const { User } = require('../../../database/models');
+
+const findAll = async (role) => {
+  const users = await User.findAll({
+    where: {
+      role: {
+        [Op.like]: `%${role || ''}%`,
+      },
+    },
+    attributes: ['id', 'name', 'role'],
+  });
+
+  return users;
+};
 
 const findById = async (id) => {
   const user = await User.findByPk({
@@ -27,6 +42,7 @@ const create = async ({ name, email, password, role = 'customer' }) => {
 };
 
 module.exports = {
+  findAll,
   findById,
   findByEmail,
   create,
