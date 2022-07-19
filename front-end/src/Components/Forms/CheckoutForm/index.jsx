@@ -8,7 +8,7 @@ function CheckoutForm() {
   const [seller, setSeller] = useState(0);
   const [address, setAddress] = useState('');
   const [number, setNumber] = useState(0);
-  const { sellerList, card, token } = useContext(context);
+  const { sellerList, card, token, setCard } = useContext(context);
   const [activeButton, setActiveButton] = useState(false);
   const history = useHistory();
 
@@ -32,6 +32,9 @@ function CheckoutForm() {
     const response = await RegisterSale(token, purchaseInformation);
 
     if (response.id) {
+      console.log('apaga');
+      setCard([]);
+      localStorage.removeItem('products');
       history.push(`/customer/orders/${response.id}`);
     }
   };

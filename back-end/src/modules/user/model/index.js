@@ -16,9 +16,8 @@ const findAll = async (role) => {
 };
 
 const findById = async (id) => {
-  const user = await User.findByPk({
+  const user = await User.findByPk(id, {
     attributes: ['id', 'name', 'role'],
-    where: { id },
   });
 
   return user;
@@ -27,6 +26,14 @@ const findById = async (id) => {
 const findByEmail = async (email) => {
   const user = await User.findOne({
     where: { email },
+  });
+
+  return user;
+};
+
+const findByName = async (name) => {
+  const user = await User.findOne({
+    where: { name },
   });
 
   return user;
@@ -41,9 +48,17 @@ const create = async ({ name, email, password, role = 'customer' }) => {
   return user;
 };
 
+const destroy = async (id) => {
+  await User.destroy({
+    where: { id },
+  });
+};
+
 module.exports = {
   findAll,
   findById,
   findByEmail,
+  findByName,
   create,
+  destroy,
 };

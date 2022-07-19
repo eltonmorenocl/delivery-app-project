@@ -5,7 +5,11 @@ import DeliveryAppLogo from '../../images/DeliveryApp_Logo.png';
 import Enter from '../../API/Enter';
 import context from '../../Context/Context';
 import './login.css';
-import { saveInformationToLocalstorage } from '../../Service/LocalSotorage';
+import {
+  fetchInformationFromLocalstorage,
+  saveInformationToLocalstorage,
+} from '../../Service/LocalSotorage';
+import checkLoggedInUser from './Services';
 
 export default function Login() {
   const [password, setPassword] = useState('');
@@ -14,9 +18,10 @@ export default function Login() {
   const { setName, email, setEmail, setToken, setRole } = useContext(context);
   const history = useHistory();
 
-  const handleChangeRegister = () => {
-    history.push('/register');
-  };
+  useEffect(() => {
+    const user = fetchInformationFromLocalstorage('user');
+    checkLoggedInUser(history, user);
+  });
 
   useEffect(() => {
     const regexEmail = /\S+@\S+\.\S+/;
@@ -55,12 +60,12 @@ export default function Login() {
     setRole(response.role);
 
     if (response.role === 'customer') history.push('/customer/products');
+    if (response.role === 'seller') history.push('/seller/orders');
   };
 
   return (
     <LayoutLogin>
       <form className="login-form">
-
         <span className="login-form-title">
           <img src={ DeliveryAppLogo } alt="imagem da logotipo" />
         </span>
@@ -102,7 +107,7 @@ export default function Login() {
         <div className="create-account-text-center">
           <span className="create-account-text">Não possui conta?</span>
           <button
-            onClick={ handleChangeRegister }
+            onClick={ () => history.push('/register') }
             type="button"
             className="create-account-link"
             data-testid="common_login__button-register"

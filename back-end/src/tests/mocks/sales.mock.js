@@ -1,6 +1,7 @@
 const newSale = {
   sellerId: 2,
   totalPrice: 100,
+  saleDate: new Date(),
   address: {
     street: "Rua trem da silva",
     number: 1,

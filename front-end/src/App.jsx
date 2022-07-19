@@ -6,6 +6,8 @@ import Login from './Pages/Login';
 import Products from './Pages/Products';
 import Register from './Pages/Register';
 import OrderDetail from './Pages/OrderDetail';
+import Orders from './Pages/Orders';
+import OrdersSeller from './Pages/OrdersSeller';
 
 function App() {
   return (
@@ -14,8 +16,10 @@ function App() {
         <Route exact path="/login" component={ Login } />
         <Route exact path="/register" component={ Register } />
         <Route exact path="/customer/products" component={ Products } />
+        <Route exact path="/customer/orders" component={ Orders } />
         <Route exact path="/customer/orders/:id" component={ OrderDetail } />
         <Route exact path="/customer/checkout" component={ Checkout } />
+        <Route exact path="/seller/orders" component={ OrdersSeller } />
         <Route exact path="/">
           <Redirect exact from="/" to="/login" />
         </Route>

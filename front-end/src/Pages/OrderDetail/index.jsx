@@ -1,30 +1,61 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import NavBar from '../../Components/Navbar';
 import Table from '../../Components/TableDetailOrders';
 import DATA_TEST_ID from '../../tests/data-testid';
-import context from '../../Context/Context';
+import './orderDetail.css';
+import { fetchInformationFromLocalstorage } from '../../Service/LocalSotorage';
 
 function OrderDetail(props) {
   const [order, setOrder] = useState({});
   const [products, setProducts] = useState([]);
-
-  const { token } = useContext(context);
+  const [button, setButton] = useState(true);
+  const [dateFormat, setDate] = useState('');
+  const [orderStatus, setOrderStatus] = useState('');
+  const { token } = fetchInformationFromLocalstorage('user');
 
   useEffect(() => {
     const { match } = props;
-    const response = async () => {
+
+    const setPageStates = async () => {
       const res = await axios.get(`http://localhost:3001/sales/${match.params.id}`, {
         headers: {
           Authorization: token,
         },
       });
+
+      const { data } = res;
       setOrder(res.data);
       setProducts(res.data.products);
+      setOrderStatus(res.data.status);
+      setDate(new Intl.DateTimeFormat('pt-br')
+        .format(new Date(data.saleDate)));
+
+      if (res.data.status === 'Em transito') {
+        setButton(false);
+      }
     };
-    response();
+
+    setPageStates();
   }, [props, token]);
+
+  const setDeliveredOrder = async () => {
+    const { match } = props;
+
+    await axios.patch(
+      `http://localhost:3001/sales/delivered/${match.params.id}`,
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
+
+    setButton(true);
+    setOrderStatus('Em transito');
+  };
 
   const linksProducts = [
     {
@@ -45,7 +76,7 @@ function OrderDetail(props) {
       {
         order.id && (
           <div>
-            <h1 className="checkout-title">Detalhes do pedidos</h1>
+            <h1 className="detail-title">Detalhes do pedidos</h1>
             <div>
               <p
                 data-testid={ DATA_TEST_ID[37] }
@@ -63,28 +94,33 @@ function OrderDetail(props) {
               <p
                 data-testid={ DATA_TEST_ID[39] }
               >
-                {order.saleDate}
+                {dateFormat}
               </p>
               <p
                 data-testid={ DATA_TEST_ID[40] }
               >
-                {order.status}
+                {orderStatus}
               </p>
-              <p data-testid={ DATA_TEST_ID[47] }>
+
+              <button
+                type="button"
+                onClick={ setDeliveredOrder }
+                disabled={ button }
+                data-testid={ DATA_TEST_ID[47] }
+              >
                 MARCAR COMO ENTREGUE
-              </p>
+              </button>
+
             </div>
-            <div className="checkout-main-content">
+            <div className="detail-main-content">
               {
                 products[0] && (
-                  <div className="checkout-order-list">
+                  <div className="detail-order-list">
                     <Table products={ products } />
 
                     <h3
-                      className="chackout-amount"
-                      data-testid={
-                        `${DATA_TEST_ID[46]}${order.id}`
-                      }
+                      className="detail-amount"
+                      data-testid="customer_order_details__element-order-total-price"
                     >
                       Valor total:
                       {` ${products

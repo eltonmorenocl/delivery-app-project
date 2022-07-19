@@ -46,20 +46,21 @@ const login = async ({ email, password }) => {
   };
 };
 
-const register = async ({ name, email, password }) => {
-  const foundCustomer = await CustomerModel.findByEmail(email);
+const register = async ({ name, email, password, role }) => {
+  const foundCustomerByEmail = await CustomerModel.findByEmail(email);
+  if (foundCustomerByEmail) throw new ConflictError('Email already exists');
 
-  if (foundCustomer) {
-    throw new ConflictError('Email already exists');
-  }
+  const foundCustomerByName = await CustomerModel.findByName(name);
+  if (foundCustomerByName) throw new ConflictError('Name already exists');
 
   const newCustomer = await CustomerModel.create({
     name,
     email,
     password: encrypt(password),
+    role,
   });
 
-  const { id, role } = newCustomer;
+  const { id } = newCustomer;
   const token = generateToken({ id, role });
 
   return {
@@ -68,8 +69,30 @@ const register = async ({ name, email, password }) => {
   };
 };
 
+const destroy = async (role, id) => {
+  if (role !== 'administrator') {
+    throw new UnauthorizedError(
+      'You are not authorized to access this resource',
+    );
+  }
+
+  const foundCustomer = await CustomerModel.findById(id);
+
+  if (!foundCustomer) {
+    throw new NotFoundError('Customer not found');
+  }
+
+  await CustomerModel.destroy(id);
+
+  return {
+    statusCode: 204,
+    payload: null,
+  };
+};
+
 module.exports = {
   findAll,
   login,
   register,
+  destroy,
 };

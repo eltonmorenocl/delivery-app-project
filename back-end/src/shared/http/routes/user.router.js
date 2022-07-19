@@ -16,4 +16,6 @@ userRouter.get('/', authHandler, CostumerController.findAll);
 userRouter.post('/login', validateUserLogin, CostumerController.login);
 userRouter.post('/register', validateUserRegister, CostumerController.register);
 
+userRouter.delete('/:id', authHandler, CostumerController.destroy);
+
 module.exports = { userRouter };
