@@ -9,7 +9,7 @@ function CardOrders({ order, user }) {
   return user === 'seller' ? (
     <div
       className={ `cardOrders ${
-        order.status === 'Em transito' ? 'cardOrders_in-transit' : ''
+        order.status === 'Em Trânsito' ? 'cardOrders_in-transit' : ''
       }${order.status === 'Preparando' ? 'cardOrders_in-preparing' : ''}${
         order.status === 'Entregue' ? 'cardOrders_delivered' : ''
       }` }

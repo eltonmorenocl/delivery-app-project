@@ -10,7 +10,7 @@ const findAll = async (role) => {
         [Op.not]: 'administrator',
       },
     },
-    attributes: ['id', 'name', 'role'],
+    attributes: ['id', 'name', 'email', 'role'],
   });
 
   return users;
