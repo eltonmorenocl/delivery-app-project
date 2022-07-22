@@ -3,6 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from './renderWithRouter';
+import axios from 'axios'
 
 test('Alterando o valor dos campos e testando o valor guardado', () => {
   renderWithRouter(<App />);
@@ -52,15 +53,27 @@ test('Se o botão de registro funciona', () => {
 test('Se o botão de login funciona', async () => {
   const { history } = renderWithRouter(<App />);
 
+  const CreateAccountRes = {
+    status: 200,
+    data: {
+      user: {
+        name: 'zebirita',
+        email: 'zebirita@email.com'
+      },
+      token: 'ert.pwk.mfa',
+      role: 'customer',
+    }
+  }
+
+  jest.spyOn(axios, 'post').mockResolvedValue(CreateAccountRes);
+
   const inputEmail = screen.getByTestId('common_login__input-email');
   expect(inputEmail).toBeInTheDocument();
-  expect(inputEmail).toHaveValue('');
   userEvent.type(inputEmail, 'zebirita@email.com');
   expect(inputEmail).toHaveValue('zebirita@email.com');
 
   const inputPassword = screen.getByTestId('common_login__input-password');
   expect(inputPassword).toBeInTheDocument();
-  expect(inputPassword).toHaveValue('');
   userEvent.type(inputPassword, '$#zebirita#$');
   expect(inputPassword).toHaveValue('$#zebirita#$');
 
