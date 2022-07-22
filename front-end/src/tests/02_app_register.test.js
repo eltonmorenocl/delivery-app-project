@@ -4,8 +4,11 @@ import renderWithRouter from './renderWithRouter';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CreateAccount from '../API/CreateAccount';
+import axios from 'axios'
+// import CreateAccount from './mocks/createAccount';
 
 describe(" Register Component", () => {
+  
   test("testa de possui o campo name", () => {
     const render = renderWithRouter(<App />);
     render.history.push('/register');
@@ -52,11 +55,12 @@ describe(" Register Component", () => {
           name: 'zebirita',
           email: 'zebirita@email.com'
         },
-        token: 'ert.pwk.mfa'
+        token: 'ert.pwk.mfa',
+        role: 'customer',
       }
     }
 
-    CreateAccount.post = jest.fn(() => Promise.resolve(CreateAccountRes));
+    jest.spyOn(axios, 'post').mockResolvedValue(CreateAccountRes);
 
     const inputName = screen.getByTestId("common_register__input-name");
     userEvent.type(inputName, 'testes teste2');
@@ -73,7 +77,7 @@ describe(" Register Component", () => {
     const buttonRegister = screen.getByRole("button", {name: /registrar/i});
     userEvent.click(buttonRegister);
 
-    waitFor(() => {
+    await waitFor(() => {
       const { pathname } = history.location;
       expect(pathname).toBe('/customer/products');
     })
