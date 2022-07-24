@@ -1,0 +1,566 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Delivery App API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Register a new user",
+        "description": "Register a new customer, seller or admin",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Register-User"
+              },
+              "example": {
+                "name": "John Doe",
+                "email": "john@email.com",
+                "password": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "name": "John Doe",
+                  "role": "customer",
+                  "email": "john@email.com",
+                  "token": "eyJhbGcvOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjU3OTE1ODUxLCJleHAiOjE2NjA1MDc4NTF9.BrmhijmuE7q22o-1FnPyQeyi0TSanxcuhc9ZHf-RDT4"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "\"name\" is required"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Email already exists"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid email",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "\"email\" must be a valid email"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Login a user",
+        "description": "Login a user",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login-User"
+              },
+              "example": {
+                "email": "john@email.com",
+                "password": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "name": "John Doe",
+                  "role": "customer",
+                  "email": "john@email.com",
+                  "token": "eyJhbGcvOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjU3OTE1ODUxLCJleHAiOjE2NjA1MDc4NTF9.BrmhijmuE7q22o-1FnPyQeyi0TSanxcuhc9ZHf-RDT4"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "\"email\" is required"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid email or password"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get users",
+        "description": "Get all registered users exepcept admins",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "description": "Filter users by role",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["customer", "seller"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "name": "John Doe",
+                    "role": "customer",
+                    "email": "john@email.com",
+                    "token": "eyJhbGcvOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNjU3OTE1ODUxLCJleHAiOjE2NjA1MDc4NTF9.BrmhijmuE7q22o-1FnPyQeyi0TSanxcuhc9ZHf-RDT4"
+                  }
+                ]
+              }
+            }
+          },
+          "411": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "You are not authorized to access this resource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete user",
+        "description": "Delete a user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "User not found"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "You are not authorized to access this resource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales": {
+      "get": {
+        "tags": ["Sales"],
+        "summary": "Get sales",
+        "description": "Get all sales",
+        "operationId": "getSales",
+        "responses": {
+          "200": {
+            "description": "Sales retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Return-Customer-Sale"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid token"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Sales"],
+        "summary": "Create a sale",
+        "description": "Create a sale",
+        "operationId": "createSale",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Create-Sale"
+              },
+              "example": {
+                "sellerId": 1,
+                "totalPrice": 100,
+                "address": {
+                  "street": "Rua dos Bobos",
+                  "number": "123"
+                },
+                "orders": [
+                  {
+                    "id": 1,
+                    "quantity": 5
+                  },
+                  {
+                    "id": 2,
+                    "quantity": 10
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sale created successfully"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "\"totalPrice\" is required"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Customer not found"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Sale already exists",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Sale already exists"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid product",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "\"totalPrice\" must be greater than 0"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sales/:id": {
+      "get": {
+        "tags": ["Sales"],
+        "summary": "Get sale",
+        "description": "Get a sale",
+        "operationId": "getSale",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Sale ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sale retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Return-Customer-Sale"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Sale not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Sale not found"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Access denied",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid token"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["customer", "seller", "admin"]
+          }
+        }
+      },
+      "Return-Users": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/User"
+        }
+      },
+      "Register-User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "email": {
+            "type": "string",
+            "required": true
+          },
+          "password": {
+            "type": "string",
+            "required": true
+          },
+          "role": {
+            "type": "string",
+            "enum": ["customer", "seller", "admin"],
+            "required": false
+          }
+        }
+      },
+      "Login-User": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "required": true
+          },
+          "password": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "Create-Sale": {
+        "type": "object",
+        "properties": {
+          "sellerId": {
+            "type": "integer",
+            "format": "int64",
+            "required": true
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "double",
+            "required": true
+          },
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "required": true
+                },
+                "quantity": {
+                  "type": "integer",
+                  "format": "int64",
+                  "required": true
+                }
+              }
+            }
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "street": {
+                "type": "string",
+                "required": true
+              },
+              "number": {
+                "type": "integer",
+                "format": "int64",
+                "required": true
+              }
+            }
+          }
+        }
+      },
+      "Customer-Sale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "saleDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Pendente", "Preparando", "Em Trânsito", "Entregue"]
+          }
+        }
+      },
+      "Seller-Sale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "saleDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Pendente", "Preparando", "Em Trânsito", "Entregue"]
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "street": {
+                "type": "string"
+              },
+              "number": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      },
+      "Return-Customer-Sale": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Customer-Sale"
+        }
+      },
+      "Return-Seller-Sale": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Seller-Sale"
+        }
+      }
+    }
+  }
+}

@@ -104,44 +104,52 @@ function ProductCard({ cardProduct, cartState }) {
   };
 
   return (
-    <div className="productCard">
-
-      <span data-testid={ `customer_products__element-card-price--${id}` }>
-        { `R$ ${price.replace('.', ',')}` }
-      </span>
+    <div className="product-card">
 
       <img
         data-testid={ `customer_products__img-card-bg-image--${id}` }
         src={ image }
         alt={ name }
-        height="50px"
+        height="70px"
       />
 
-      <span data-testid={ `customer_products__element-card-title--${id}` }>
-        { name }
-      </span>
+      <div className="product-info">
 
-      <button
-        data-testid={ `customer_products__button-card-rm-item--${id}` }
-        type="button"
-        disabled={ !activeButton }
-        onClick={ handleRemoveItem }
-      >
-        -
-      </button>
-      <input
-        data-testid={ `customer_products__input-card-quantity--${id}` }
-        value={ productQty }
-        min={ 0 }
-        onChange={ handleInputChange }
-      />
-      <button
-        data-testid={ `customer_products__button-card-add-item--${id}` }
-        type="button"
-        onClick={ handleAddItem }
-      >
-        +
-      </button>
+        <span data-testid={ `customer_products__element-card-title--${id}` }>
+          { name }
+        </span>
+
+        <span
+          className="price"
+          data-testid={ `customer_products__element-card-price--${id}` }
+        >
+          { `R$ ${price.replace('.', ',')}` }
+        </span>
+
+        <div className="product-quantity">
+          <button
+            data-testid={ `customer_products__button-card-rm-item--${id}` }
+            type="button"
+            disabled={ !activeButton }
+            onClick={ handleRemoveItem }
+          >
+            -
+          </button>
+          <input
+            data-testid={ `customer_products__input-card-quantity--${id}` }
+            value={ productQty }
+            min={ 0 }
+            onChange={ handleInputChange }
+          />
+          <button
+            data-testid={ `customer_products__button-card-add-item--${id}` }
+            type="button"
+            onClick={ handleAddItem }
+          >
+            +
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

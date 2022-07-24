@@ -1,0 +1,50 @@
+.cardOrders {
+  background-color: #fbe2c9;
+  border: 5px solid #e0dd13;
+  border-radius: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  width: 300px;
+}
+
+.cardOrders p {
+  background-color: transparent;
+}
+
+.cardOrders_card {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+}
+
+.cardOrders_request p {
+  background-color: transparent;
+}
+
+.cardOrders_request, .cardOrders_status, .cardOrders_date, .cardOrders_price {
+  align-items: center;
+  display: flex;
+}
+
+.cardOrders_request p, .cardOrders_status p, .cardOrders_date p, .cardOrders_price p {
+  padding-top: 0;
+}
+
+.cardOrders_pending {
+  border: 5px solid #e0dd13;
+}
+
+.cardOrders_in-preparing {
+  border: 5px solid #3ce6e0;
+}
+
+.cardOrders_in-transit {
+  border: 5px solid #7ae63c;
+}
+
+.cardOrders_delivered {
+  border: 5px solid #00fb8e;
+}

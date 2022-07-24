@@ -7,9 +7,10 @@ const findAll = async (role) => {
     where: {
       role: {
         [Op.like]: `%${role || ''}%`,
+        [Op.not]: 'administrator',
       },
     },
-    attributes: ['id', 'name', 'role'],
+    attributes: ['id', 'name', 'email', 'role'],
   });
 
   return users;

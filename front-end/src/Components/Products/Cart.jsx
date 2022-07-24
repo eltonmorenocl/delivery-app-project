@@ -6,7 +6,6 @@ import context from '../../Context/Context';
 function Cart({ cartState }) {
   const { products, setProducts } = useContext(context);
   const [totalPrice, setTotalPrice] = useState('0');
-  // const [activeButton, setActiveButton] = useState(false);
 
   const history = useHistory();
 
@@ -28,6 +27,7 @@ function Cart({ cartState }) {
   return (
     <div data-testid="customer_products__checkout-bottom-value">
       <button
+        className="cart-button"
         data-testid="customer_products__button-cart"
         type="button"
         disabled={ (totalPrice === '0' || totalPrice === '0,00') }
