@@ -1,6 +1,6 @@
 const { UnauthorizedError } = require('restify-errors');
 
-const { verifyToken } = require('../../../utils/auth');
+const Auth = require('../../../utils/auth');
 
 const authHandler = async (req, _res, next) => {
   const { authorization } = req.headers;
@@ -9,7 +9,7 @@ const authHandler = async (req, _res, next) => {
     throw new UnauthorizedError('Token not provided');
   }
 
-  const decoded = verifyToken(authorization);
+  const decoded = Auth.verifyToken(authorization);
 
   req.user = decoded;
 

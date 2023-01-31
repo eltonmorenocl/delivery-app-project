@@ -56,9 +56,9 @@ const updateDelivered = async (req, res) => {
 const create = async (req, res) => {
   const { id, role } = req.user;
 
-  const { statusCode } = await SaleService.create(role, id, req.body);
+  const response = await SaleService.create(role, id, req.body);
 
-  return res.status(statusCode).end();
+  return res.status(response.statusCode).json({ id: response.id });
 };
 
 module.exports = {
@@ -69,5 +69,4 @@ module.exports = {
   updateDelivering,
   updateDelivered,
   create,
-
 };

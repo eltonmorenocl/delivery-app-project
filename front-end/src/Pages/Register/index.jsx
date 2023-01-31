@@ -5,6 +5,7 @@ import DeliveryAppLogo from '../../images/DeliveryApp_Logo.png';
 import context from '../../Context/Context';
 import './register.css';
 import CreateAccount from '../../API/CreateAccount';
+import { saveInformationToLocalstorage } from '../../Service/LocalSotorage';
 
 export default function Register() {
   const [password, setPassword] = useState('');
@@ -39,12 +40,12 @@ export default function Register() {
       return;
     }
 
-    localStorage.setItem('user', JSON.stringify({
+    saveInformationToLocalstorage('user', {
       name,
       email,
       role: response.role,
       token: response.token,
-    }));
+    });
 
     setToken(response.token);
     setRole(response.role);

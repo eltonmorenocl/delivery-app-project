@@ -93,6 +93,7 @@ input:focus {
   flex-wrap: wrap;
   justify-content: center;
   padding-bottom: 13px;
+  width: 100%;
 }
 
 .login-form-btn {

@@ -1,0 +1,36 @@
+.admin_center_table {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.admin_form {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 10px;
+}
+
+.admin_form label {
+  margin-right: 10px;
+  min-width: 250px;
+}
+
+.admin_form label input, .admin_form label select {
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
+.admin_form label select {
+  min-width: 190px;
+}
+
+.admin_form button {
+  min-width: 250px;
+}
+
+.admin_table {
+  margin-top: 1rem;
+  width: 80%;
+}

@@ -40,11 +40,12 @@ const findById = async (role, userId, saleId) => {
 const create = async (role, userId, sale) => {
   if (role !== 'customer') throw new UnauthorizedError(NOT_AUTHORIZED);
 
-  const { sellerId, totalPrice, address, orders } = sale;
+  const { sellerId, totalPrice, address, orders, saleDate } = sale;
   const createdSale = await SaleModel.createNewSale({
     userId,
     sellerId,
     totalPrice,
+    saleDate,
     deliveryAddress: address.street,
     deliveryNumber: address.number,
   });
@@ -56,7 +57,7 @@ const create = async (role, userId, sale) => {
     }),
   );
 
-  return { statusCode: 201, payload: null };
+  return { statusCode: 201, payload: null, id: createdSale.id };
 };
 
 const updatePending = async (id, role) => {
@@ -65,12 +66,12 @@ const updatePending = async (id, role) => {
   }
 
   const foundSaleId = await SaleModel.findByIdByPending(id);
-  
+
   if (foundSaleId === null) throw new NotFoundError(saleNotFound);
 
-    return {
-      statusCode: 200,
-    };
+  return {
+    statusCode: 200,
+  };
 };
 
 const updatePreparing = async (id, role) => {
@@ -79,12 +80,12 @@ const updatePreparing = async (id, role) => {
   }
 
   const foundSaleId = await SaleModel.findByIdByPreparing(id);
-  
+
   if (foundSaleId === null) throw new NotFoundError(saleNotFound);
 
-    return {
-      statusCode: 200,
-    };
+  return {
+    statusCode: 200,
+  };
 };
 
 const updateDelivering = async (id, role) => {
@@ -93,26 +94,26 @@ const updateDelivering = async (id, role) => {
   }
 
   const foundSaleId = await SaleModel.findByIdByDelivering(id);
-  
+
   if (foundSaleId === null) throw new NotFoundError(saleNotFound);
 
-    return {
-      statusCode: 200,
-    };
+  return {
+    statusCode: 200,
+  };
 };
 
 const updateDelivered = async (id, role) => {
-  if (role === 'customer') {
+  if (role === 'seller') {
     return { statusCode: 401 };
   }
 
   const foundSaleId = await SaleModel.findByIdByDelivered(id);
-  
+
   if (foundSaleId === null) throw new NotFoundError(saleNotFound);
 
-    return {
-      statusCode: 200,
-    };
+  return {
+    statusCode: 200,
+  };
 };
 
 module.exports = {

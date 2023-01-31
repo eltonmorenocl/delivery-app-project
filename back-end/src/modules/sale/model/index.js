@@ -25,6 +25,7 @@ const findAllBySeller = async (sellerId) => {
   const sales = await Sale.findAll({
     where: { sellerId },
     attributes: { exclude: ['userId', 'sellerId'] },
+    order: [['id', 'DESC']],
   });
 
   return sellerSaleReturnNormalizer(sales);
@@ -74,7 +75,7 @@ const findByIdByPending = async (id) => {
 
   if (!sale) return null;
 
-  await Sale.update({ status: 'PENDENTE' }, { where: { id } });
+  await Sale.update({ status: 'Pendente' }, { where: { id } });
   return true;
 };
 
@@ -83,7 +84,7 @@ const findByIdByPreparing = async (id) => {
 
   if (!sale) return null;
 
-  await Sale.update({ status: 'PREPARANDO' }, { where: { id } });
+  await Sale.update({ status: 'Preparando' }, { where: { id } });
   return true;
 };
 
@@ -92,7 +93,7 @@ const findByIdByDelivering = async (id) => {
 
   if (!sale) return null;
 
-  await Sale.update({ status: 'EM TRANSITO' }, { where: { id } });
+  await Sale.update({ status: 'Em Trânsito' }, { where: { id } });
   return true;
 };
 
@@ -101,7 +102,7 @@ const findByIdByDelivered = async (id) => {
 
   if (!sale) return null;
 
-  await Sale.update({ status: 'ENTREGUE' }, { where: { id } });
+  await Sale.update({ status: 'Entregue' }, { where: { id } });
   return true;
 };
 
@@ -109,6 +110,7 @@ const createNewSale = async ({
   userId,
   sellerId,
   totalPrice,
+  saleDate,
   deliveryAddress,
   deliveryNumber,
 }) => {
@@ -118,7 +120,8 @@ const createNewSale = async ({
     totalPrice,
     deliveryAddress,
     deliveryNumber,
-    status: 'PENDENTE',
+    saleDate,
+    status: 'Pendente',
   });
   return newSale;
 };
