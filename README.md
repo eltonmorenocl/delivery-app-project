@@ -33,7 +33,7 @@
 
 * [Tecnologias](#-tecnologias)
 
-* [Documentação da API](#blue_book-documentação)
+* [Documentação](#blue_book-documentações)
 
 * [Autores](#-autor)
 
